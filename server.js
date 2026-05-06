@@ -3,6 +3,9 @@ import mysql from 'mysql2/promise';
 import cors from 'cors';
 import fs from 'fs/promises';
 import path from 'path';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
 app.use(cors());
@@ -10,10 +13,10 @@ app.use(express.json({ limit: '50mb' }));
 
 // Database connection pool
 const pool = mysql.createPool({
-  host: '127.0.0.1',
-  user: 'root',
-  password: '',
-  database: 'deteksi_container',
+  host: process.env.DB_HOST || '127.0.0.1',
+  user: process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD || '',
+  database: process.env.DB_NAME || 'deteksi_container',
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
@@ -113,7 +116,7 @@ app.delete('/api/db/sessions/:id', async (req, res) => {
   }
 });
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Database API Server running on port ${PORT}`);
 });

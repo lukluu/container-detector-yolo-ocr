@@ -1,13 +1,16 @@
 import mysql from 'mysql2/promise';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 async function initDB() {
   console.log("Connecting to MySQL...");
   
   // Connect without DB first to create it
   const connection = await mysql.createConnection({
-    host: '127.0.0.1',
-    user: 'root',
-    password: ''
+    host: process.env.DB_HOST || '127.0.0.1',
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || ''
   });
 
   try {
