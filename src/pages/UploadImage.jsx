@@ -106,9 +106,12 @@ const UploadImage = () => {
             {previewUrl ? (
               <div className="relative w-full h-full flex items-center justify-center">
                 <img 
-                  src={previewUrl} 
+                  src={resultData?.img_full || previewUrl} 
                   alt="Preview" 
-                  className="max-h-[500px] w-auto object-contain rounded-xl shadow-lg border border-slate-200 dark:border-slate-800" 
+                  className={`max-h-[500px] w-auto object-contain rounded-xl shadow-lg border border-slate-200 dark:border-slate-800 ${resultData?.img_full ? 'cursor-pointer hover:ring-2 hover:ring-cyan-500 transition-all' : ''}`}
+                  onClick={() => {
+                    if (resultData?.img_full) setLightboxImg(resultData.img_full);
+                  }}
                 />
                 {!isProcessing && !resultData && (
                   <button 
@@ -190,7 +193,6 @@ const UploadImage = () => {
                     />
                   </div>
                 </div>
-
                 <div className="grid grid-cols-2 gap-4">
                   <div className="bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-xl p-4 flex flex-col items-center gap-3">
                     <p className="text-slate-500 text-xs font-medium">Crop NK</p>
@@ -244,16 +246,8 @@ const UploadImage = () => {
 
       {/* Lightbox Modal */}
       {lightboxImg && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm" onClick={() => setLightboxImg(null)}>
-          <div className="relative max-w-4xl max-h-[90vh] overflow-hidden rounded-2xl border border-white/10 bg-slate-900" onClick={e => e.stopPropagation()}>
-            <div className="absolute top-2 right-2 z-10">
-              <button 
-                onClick={() => setLightboxImg(null)}
-                className="w-8 h-8 flex items-center justify-center rounded-full bg-black/50 text-white hover:bg-white/20 transition-colors backdrop-blur-md"
-              >
-                ✕
-              </button>
-            </div>
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm cursor-pointer" onClick={() => setLightboxImg(null)}>
+          <div className="relative max-w-4xl max-h-[90vh] overflow-hidden rounded-2xl border border-white/10 bg-slate-900">
             <img src={lightboxImg} alt="Enlarged Crop" className="w-full h-full object-contain max-h-[90vh]" />
           </div>
         </div>
